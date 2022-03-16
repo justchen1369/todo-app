@@ -60,7 +60,6 @@ function createTodoItem(description, id, done = false) {
     const doneButton = document.createElement("input");
     doneButton.type = "checkbox";
     doneButton.classList.add("done-button");
-    doneButton.innerText = "done";
     doneButton.onclick = async () => {
         const done = doneButton.checked;
         
