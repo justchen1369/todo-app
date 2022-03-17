@@ -1,3 +1,5 @@
+// @ts-check
+
 const sqlite = require('better-sqlite3');
 const express = require('express');
 const blocked = require('blocked');
@@ -25,7 +27,7 @@ app.get('/todos/range', (req, res) => {
     const { start, end } = req.query;
 
     if (!start || !end) {
-        res.status(400).send({ error: 'Missing start or end parameter'});
+        res.status(400).send({ error: 'Missing start or end parameter' });
         return;
     }
 
@@ -41,26 +43,24 @@ app.get('/todos/all', (req, res) => {
 app.post('/create', (req, res) => {
     const { description } = req.body;
 
-    console.log(req.body);
     if (!description) {
         res.status(400).send({ error: 'Missing description' });
         return;
     }
 
     const timestamp = Date.now();
-    
+
     db.prepare('INSERT INTO todo (timestamp, description, done) VALUES (?, ?, ?)').run(timestamp, description, 0);
-    
+
     const id = db.prepare('SELECT id FROM todo WHERE timestamp = ?').get(timestamp);
-    res.send({timestamp, description, id: id.id});
+    res.send({ timestamp, description, id: id.id });
 })
 
 app.patch('/done', (req, res) => {
     const { id } = req.body;
-    
+
     const done = req.body.done ? 1 : 0;
 
-    console.log({id, done});
     if (done !== 0 && done !== 1) {
         res.status(400).send({ error: 'done must be 0 or 1' });
         return;
@@ -106,14 +106,14 @@ app.patch("/description", (req, res) => {
 // using app.delete hangs for some reason
 app.delete("/delete", (req, res) => {
     const { id } = req.body;
-    
+
     if (!id) {
-        res.status(400).send({ error: 'Missing id'});
+        res.status(400).send({ error: 'Missing id' });
         return;
     }
 
     if (!db.prepare('SELECT * FROM todo WHERE id = ?').get(id)) {
-        res.status(404).send({ error: 'Todo not found'});
+        res.status(404).send({ error: 'Todo not found' });
         return;
     }
 
@@ -121,4 +121,5 @@ app.delete("/delete", (req, res) => {
 
     res.send("OK");
 })
+
 app.listen(3000, () => console.log('Example app listening on port 3000!'))

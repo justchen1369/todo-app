@@ -25,7 +25,6 @@ function restMethod(method, url, data) {
 const todos = document.getElementById("todos");
 
 async function createTodo(description) {
-    // @ts-ignore
 
     if (!description) {
         return
@@ -62,7 +61,7 @@ function createTodoItem(description, id, done = false) {
     doneButton.classList.add("done-button");
     doneButton.onclick = async () => {
         const done = doneButton.checked;
-        
+
         if (done) {
             todoItem.classList.add("strike");
         } else {
@@ -127,10 +126,6 @@ function error(code, message) {
 
 const newTodo = document.getElementById("new-todo");
 
-async function newTodoClickCallback() {
-}
-
-
 newTodo.addEventListener("click", async () => {
     newTodo.style.visibility = "hidden";
     let finished = false;
@@ -141,8 +136,6 @@ newTodo.addEventListener("click", async () => {
         todos.appendChild(container);
         container.querySelector("li").focus();
 
-
-        
         await new Promise((resolve) => {
             async function attemptCreateTodo() {
                 container.removeEventListener("keydown", containerKeyDownCallback);
